@@ -3,6 +3,7 @@ package com.mobile.user.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONObject;
@@ -10,6 +11,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mobile.user.bean.User;
 import com.mobile.user.service.UserService;
@@ -24,11 +26,14 @@ public class UserController {
 	private UserService userService;
 
 	@RequestMapping("addUser")
-	public String addUser(User user,HttpServletRequest request){
+	@ResponseBody
+	public void addUser(User user,HttpServletRequest request){
 		userService.add(user);
 		
 		//查询绑定状态
-		String access_token = this.getToken(request);
+//		String access_token = this.getToken(request);
+		
+		String access_token = (String) request.getSession().getAttribute("access_token");
 		System.out.println("保存用户，查询绑定状态时的access_token="+access_token);
 		
 		String url="https://openapi.baidu.com/social/api/2.0/user/bind_status";
@@ -37,10 +42,11 @@ public class UserController {
 		String statusjson=HttpUtil.post(url, paramsMap);
 		
 		System.out.println("statusjson="+statusjson);
-		String error_code = JSONObject.fromObject(statusjson).getString("error_code");
+		boolean key = JSONObject.fromObject(statusjson).containsKey("error_code");
+		System.out.println("判断绑定状态--"+key);
 		
-		
-		if(error_code!=null){//错误码不为空，即存在，说明未绑定
+		if(key){
+			System.out.println("正在绑定-------");
 			//发送绑定请求,参数access_token,uid,uid_sign = md5(uid+Secrect Key)
 			url="https://openapi.baidu.com/social/api/2.0/user/bind";
 			String uid_sign=Md5Util.getMD5(user.getId()+"jcgOfjgsHR2AFEvxZu330WyWMWcVlY5T");
@@ -48,9 +54,10 @@ public class UserController {
 			paramsMap.put("uid_sign",uid_sign);
 			String bindjson=HttpUtil.post(url, paramsMap);
 			System.out.println("bindjson="+bindjson);
+		}else{
+			System.out.println("已经绑定-------");
 		}
 		
-		return "user/login";
 	}
 	
 	@RequestMapping("login")
@@ -123,6 +130,10 @@ public class UserController {
 		
 		System.out.println("tokenjson="+tokenjson);
 		String access_token = JSONObject.fromObject(tokenjson).getString("access_token");
+		
+		//把access_token放到session中，判断绑定状态是调用
+		request.getSession().setAttribute("access_token", access_token);
+		
 		System.out.println("access_token= "+access_token);
 		
 		//根据access_token获取用户信息,获取社会化ID
@@ -175,36 +186,16 @@ public class UserController {
 		return "user/login";
 	}
 	
+	
 	/**
 	 * 
-	 * 功能：封装获取token的方法
+	 * 功能：测试转发和重定向
 	 * 作者：yangxiangyang
-	 * 时间：2016年1月7日下午2:20:35
+	 * 时间：2016年1月8日上午10:49:15
 	 */
-	public String getToken(HttpServletRequest request){
+	public String towhere(){
 		
+		return "redirect:user/login";
 		
-		String code = (String) request.getSession().getAttribute("code");
-		//获取code ,获取token, 根据token获取用户信息
-		String client_id="ZhE3XUdlhHePmlGdR84m8nCL";
-		String client_secret="jcgOfjgsHR2AFEvxZu330WyWMWcVlY5T";
-		String url="https://openapi.baidu.com/social/oauth/2.0/token";
-		String redirect_uri="http://127.0.0.1:8080/ydmm/user/threelogin.do";
-		
-		Map<String,String> paramsMap=new HashMap<String,String>();
-		paramsMap.put("grant_type", "authorization_code");//developer_credentials//authorization_code
-		paramsMap.put("client_id", client_id);
-		paramsMap.put("client_secret", client_secret);
-		paramsMap.put("url", url);
-		paramsMap.put("code", code);
-		paramsMap.put("redirect_uri", redirect_uri);
-				
-		String tokenjson=HttpUtil.post(url, paramsMap);
-		
-		System.out.println("getToken--tokenjson="+tokenjson);
-		String access_token = JSONObject.fromObject(tokenjson).getString("access_token");
-		System.out.println("getToken--access_token= "+access_token);
-		
-		return access_token;
 	}
 }

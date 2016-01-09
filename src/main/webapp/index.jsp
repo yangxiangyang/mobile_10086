@@ -61,7 +61,14 @@ function quit(){
 				<div id="mmd_login">
 				
 				
-				<!-- ************判断登陆状态********** -->
+				
+				
+				<div class="use_before fr mt5">
+					<a class="c2290e4 fz16 lh40 ml20 mr20" href="<%=request.getContextPath()%>/app/analysisPage.do" rel="nofollow">解析页面</a>
+				</div>
+				
+				<!-- 判断登陆状态+++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+				
 				<c:choose>
 					<c:when test="${user2.loginname ==null }">
 						<div class="use_before fr mt5">
@@ -123,7 +130,7 @@ function quit(){
 	
 	
 	
-	<!-- *********添加bootstrap轮播 *********** -->
+	<!-- 添加bootstrap轮播 ++++++++++++++++++++++++++++ -->
 	
 	<div id="myCarousel" class="carousel slide" style="width:730px; height:320px;overflow:hidden; float: left;" >
    <!-- 轮播（Carousel）指标 -->
