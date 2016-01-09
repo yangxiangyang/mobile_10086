@@ -66,71 +66,7 @@ public class AnalysisNet {
 			
 			
 			parser.reset();
-			//获取评论 class= mj_pl_list_i
-//			commentUser	评论人
-//			commentDate	评论时间
-//			comment	评论内容
-//			commentNum	评分
-//			appid	所属应用
-//			tagNameFilter=new TagNameFilter("div");
-//			attributeFilter = new HasAttributeFilter("class", "mj_pl_list_i_m_c font-f-yh");
-//			andFilter=new AndFilter(tagNameFilter, attributeFilter);
-//			nodeList = parser.parse(andFilter);
-//			
-//			for (int i = 0; i < nodeList.size(); i++) {
-//				tagNode = (TagNode) nodeList.elementAt(i);
-//				String comment = tagNode.getFirstChild().getText();
-////				System.out.println("nodeList.size()==============="+nodeList.size());
-////				System.out.println("comment="+comment);
-//			}
 			
-			
-			parser.reset();
-			//class=mj_pl_list_i_m_t font-f-yh
-			//commentUser	评论人
-			//commentNum	评分
-			tagNameFilter=new TagNameFilter("div");
-			attributeFilter = new HasAttributeFilter("class", "mj_pl_list_i_m");
-			andFilter=new AndFilter(tagNameFilter, attributeFilter);
-			nodeList = parser.parse(andFilter);
-			for (int i = 0; i < nodeList.size(); i++) {
-				tagNode = (TagNode) nodeList.elementAt(i);
-				System.out.println("父类"+i+"-----------"+tagNode);
-				NodeList children = tagNode.getChildren();
-//				for (int j = 0; j < children.size(); j++) {
-//					System.out.println("父类"+i+"的子类"+j+"------------"+children.elementAt(j));
-//				}
-				
-				System.out.println("children.elementAt(0)---------------"+children.elementAt(0));
-				System.out.println("children.elementAt(1)---------------"+children.elementAt(1));
-				System.out.println("children.elementAt(2)---------------"+children.elementAt(2));
-				
-//				tagNameFilter=new TagNameFilter("span");
-//				parser.reset();
-//				NodeList nodeList2 = parser.parse(tagNameFilter);
-//				nodeList2.elementAt(0);
-//				System.out.println("====================elementAt"+i);
-//				System.out.println("nodeList.elementAt(0)==============="+nodeList2.elementAt(0));
-			}
-			
-			
-			
-			
-//			tagNode = (TagNode) nodeList.elementAt(0);
-			
-			
-			/*System.out.println("comment="+tagNode);
-			tagNameFilter=new TagNameFilter("span");
-			parser.reset();
-			nodeList = parser.parse(tagNameFilter);
-			System.out.println("nodeLis="+nodeList);
-			NodeList list = tagNode.getChildren();
-			for (int i = 0; i < list.size(); i++) {
-				
-				
-			}
-			
-			*/
 			
 			
 			
