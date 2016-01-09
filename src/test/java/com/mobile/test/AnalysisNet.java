@@ -103,7 +103,6 @@ public class AnalysisNet {
 				
 				System.out.println("children.elementAt(0)---------------"+children.elementAt(0));
 				System.out.println("children.elementAt(1)---------------"+children.elementAt(1));
-				
 				System.out.println("children.elementAt(2)---------------"+children.elementAt(2));
 				
 //				tagNameFilter=new TagNameFilter("span");
