@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mobile.pic.dao.PicMapper" >
+  <resultMap id="BaseResultMap" type="com.mobile.pic.bean.Pic" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="picurl" property="picurl" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="app" property="app" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, picurl, description, app
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_pic
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_pic
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.mobile.pic.bean.Pic" >
+    insert into t_pic (id, picurl, description, 
+      app)
+    values (#{id,jdbcType=VARCHAR}, #{picurl,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{app,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mobile.pic.bean.Pic" >
+    insert into t_pic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="picurl != null" >
+        picurl,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="app != null" >
+        app,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="picurl != null" >
+        #{picurl,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="app != null" >
+        #{app,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mobile.pic.bean.Pic" >
+    update t_pic
+    <set >
+      <if test="picurl != null" >
+        picurl = #{picurl,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="app != null" >
+        app = #{app,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mobile.pic.bean.Pic" >
+    update t_pic
+    set picurl = #{picurl,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      app = #{app,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mobile.comment.dao.CommentMapper" >
+  <resultMap id="BaseResultMap" type="com.mobile.comment.bean.Comment" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="commentUser" property="commentuser" jdbcType="VARCHAR" />
+    <result column="commentDate" property="commentdate" jdbcType="TIMESTAMP" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="commentNum" property="commentnum" jdbcType="VARCHAR" />
+    <result column="appid" property="appid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, commentUser, commentDate, comment, commentNum, appid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_comment
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_comment
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.mobile.comment.bean.Comment" >
+    insert into t_comment (id, commentUser, commentDate, 
+      comment, commentNum, appid
+      )
+    values (#{id,jdbcType=VARCHAR}, #{commentuser,jdbcType=VARCHAR}, #{commentdate,jdbcType=TIMESTAMP}, 
+      #{comment,jdbcType=VARCHAR}, #{commentnum,jdbcType=VARCHAR}, #{appid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mobile.comment.bean.Comment" >
+    insert into t_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="commentuser != null" >
+        commentUser,
+      </if>
+      <if test="commentdate != null" >
+        commentDate,
+      </if>
+      <if test="comment != null" >
+        comment,
+      </if>
+      <if test="commentnum != null" >
+        commentNum,
+      </if>
+      <if test="appid != null" >
+        appid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="commentuser != null" >
+        #{commentuser,jdbcType=VARCHAR},
+      </if>
+      <if test="commentdate != null" >
+        #{commentdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="commentnum != null" >
+        #{commentnum,jdbcType=VARCHAR},
+      </if>
+      <if test="appid != null" >
+        #{appid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mobile.comment.bean.Comment" >
+    update t_comment
+    <set >
+      <if test="commentuser != null" >
+        commentUser = #{commentuser,jdbcType=VARCHAR},
+      </if>
+      <if test="commentdate != null" >
+        commentDate = #{commentdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comment != null" >
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="commentnum != null" >
+        commentNum = #{commentnum,jdbcType=VARCHAR},
+      </if>
+      <if test="appid != null" >
+        appid = #{appid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mobile.comment.bean.Comment" >
+    update t_comment
+    set commentUser = #{commentuser,jdbcType=VARCHAR},
+      commentDate = #{commentdate,jdbcType=TIMESTAMP},
+      comment = #{comment,jdbcType=VARCHAR},
+      commentNum = #{commentnum,jdbcType=VARCHAR},
+      appid = #{appid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
