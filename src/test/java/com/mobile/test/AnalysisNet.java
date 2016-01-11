@@ -1,5 +1,8 @@
 package com.mobile.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.htmlparser.Parser;
 import org.htmlparser.filters.AndFilter;
 import org.htmlparser.filters.HasAttributeFilter;
@@ -11,7 +14,6 @@ import com.mobile.util.HttpUtil;
 
 public class AnalysisNet {
 	public static void main(String[] args) {
-		
 		
 
 		try {
@@ -66,10 +68,21 @@ public class AnalysisNet {
 			
 			
 			parser.reset();
-			
-			
-			
-			
+			//APP详细信息mj_info font-f-yh
+			tagNameFilter=new TagNameFilter("div");
+			attributeFilter = new HasAttributeFilter("class", "mj_info font-f-yh");
+			andFilter=new AndFilter(tagNameFilter, attributeFilter);
+			nodeList=parser.parse(andFilter);
+			tagNode = (TagNode) nodeList.elementAt(0);
+			NodeList liNode = tagNode.getChildren().elementAt(0).getChildren();
+			List<String> list=new ArrayList<String>();
+			for (int i = 0; i < liNode.size(); i++) {
+				System.out.println("第"+i+"个元素是="+liNode.elementAt(i).toPlainTextString());
+				String str=liNode.elementAt(i).toPlainTextString();
+				String pro=str.substring(str.lastIndexOf("：")+1).trim();
+				System.out.println("pro="+pro);
+				list.add(pro);
+			}
 			
 			
 		} catch (Exception e) {

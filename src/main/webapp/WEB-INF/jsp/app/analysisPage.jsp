@@ -26,7 +26,7 @@
 	   <div class="form-group">
 	      <label for="firstname" class="col-sm-2 control-label">名字</label>
 	      <div class="col-sm-7">
-	         <input type="text" class="form-control" id="firstname"  name="netUrl"
+	         <input type="text" class="form-control" id="firstname"  name="url"
 	            placeholder="请输入要解析的地址">
 	      </div>
 	   </div>
