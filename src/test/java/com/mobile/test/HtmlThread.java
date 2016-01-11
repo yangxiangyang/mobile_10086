@@ -16,7 +16,7 @@ public class HtmlThread  extends Thread{
 		
 		try {
 			
-			for (int i = startPage; i <startPage+15; i++) {
+			for (int i = startPage; i <=startPage+15; i++) {
 				Parser parser=new Parser("http://mm.10086.cn/android/software/qbrj?p="+i);
 				parser.setEncoding("UTF-8");
 				
@@ -27,8 +27,8 @@ public class HtmlThread  extends Thread{
 				
 				for (int j = 0; j < nodeList.size(); j++) {
 					TagNode tagNode = (TagNode) nodeList.elementAt(j);
-//					System.out.println(threadName+"---起始页:"+startPage+"-----------"+tagNode.getAttribute("title")+"---"+tagNode.getAttribute("href"));
-					System.out.println("http://mm.10086.cn"+tagNode.getAttribute("href"));
+					System.out.println(threadName+"---起始页:"+startPage+"-----------"+tagNode.getAttribute("title")+"---"+tagNode.getAttribute("href"));
+//					System.out.println("http://mm.10086.cn"+tagNode.getAttribute("href"));
 					
 					
 				}
