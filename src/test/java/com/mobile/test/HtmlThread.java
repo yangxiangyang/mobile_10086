@@ -7,6 +7,8 @@ import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.NodeList;
 
+import com.mobile.util.AppUtil;
+
 public class HtmlThread  extends Thread{
 	
 	private String  threadName;
@@ -28,8 +30,8 @@ public class HtmlThread  extends Thread{
 				for (int j = 0; j < nodeList.size(); j++) {
 					TagNode tagNode = (TagNode) nodeList.elementAt(j);
 					System.out.println(threadName+"---起始页:"+startPage+"-----------"+tagNode.getAttribute("title")+"---"+tagNode.getAttribute("href"));
-//					System.out.println("http://mm.10086.cn"+tagNode.getAttribute("href"));
-					
+					System.out.println("APP的网页地址是："+"http://mm.10086.cn"+tagNode.getAttribute("href"));
+//					AppUtil.getAppMsg("http://mm.10086.cn"+tagNode.getAttribute("href"));
 					
 				}
 			

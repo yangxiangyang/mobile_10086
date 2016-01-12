@@ -12,7 +12,7 @@
     <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="developer" property="developer" jdbcType="VARCHAR" />
     <result column="apptype" property="apptype" jdbcType="VARCHAR" />
-    <result column="price" property="price" jdbcType="REAL" />
+    <result column="price" property="price" jdbcType="VARCHAR" />
     <result column="downloadNums" property="downloadnums" jdbcType="VARCHAR" />
     <result column="platform" property="platform" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
@@ -42,7 +42,7 @@
     values (#{id,jdbcType=VARCHAR}, #{appname,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, 
       #{appicon,jdbcType=VARCHAR}, #{apkurl,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
       #{filesize,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, #{developer,jdbcType=VARCHAR}, 
-      #{apptype,jdbcType=VARCHAR}, #{price,jdbcType=REAL}, #{downloadnums,jdbcType=VARCHAR}, 
+      #{apptype,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR}, #{downloadnums,jdbcType=VARCHAR}, 
       #{platform,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{codeurl,jdbcType=VARCHAR}
       )
   </insert>
@@ -127,7 +127,7 @@
         #{apptype,jdbcType=VARCHAR},
       </if>
       <if test="price != null" >
-        #{price,jdbcType=REAL},
+        #{price,jdbcType=VARCHAR},
       </if>
       <if test="downloadnums != null" >
         #{downloadnums,jdbcType=VARCHAR},
@@ -174,7 +174,7 @@
         apptype = #{apptype,jdbcType=VARCHAR},
       </if>
       <if test="price != null" >
-        price = #{price,jdbcType=REAL},
+        price = #{price,jdbcType=VARCHAR},
       </if>
       <if test="downloadnums != null" >
         downloadNums = #{downloadnums,jdbcType=VARCHAR},
@@ -202,7 +202,7 @@
       updatetime = #{updatetime,jdbcType=TIMESTAMP},
       developer = #{developer,jdbcType=VARCHAR},
       apptype = #{apptype,jdbcType=VARCHAR},
-      price = #{price,jdbcType=REAL},
+      price = #{price,jdbcType=VARCHAR},
       downloadNums = #{downloadnums,jdbcType=VARCHAR},
       platform = #{platform,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},

@@ -1,9 +1,9 @@
 package com.mobile.util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.htmlparser.Parser;
 import org.htmlparser.filters.AndFilter;
@@ -11,6 +11,9 @@ import org.htmlparser.filters.HasAttributeFilter;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.NodeList;
+
+import com.mobile.app.bean.App;
+import com.mobile.app.service.AppService;
 
 public class AppUtil {
 	
@@ -21,13 +24,15 @@ public class AppUtil {
 	 * 作者：yangxiangyang
 	 * 时间：2016年1月9日上午11:44:49
 	 */
-	public static Map getAppMsg(String url){
+	@SuppressWarnings("deprecation")
+	public static void getAppMsg(String url,AppService appService){
 		
+		App app=new App();
 		
-		Map map=new HashMap();
+//		Map map=new HashMap();
 		
-		String urltest="http://mm.10086.cn/android/info/300002825368.html?from=www&fw=529#hotcom";
-		String appname="";
+//		String urltest="http://mm.10086.cn/android/info/300002825368.html?from=www&fw=529#hotcom";
+//		String appname="";
 		try {
 			//解析地址
 			Parser parser=new Parser(url);
@@ -37,9 +42,9 @@ public class AppUtil {
 			TagNameFilter tagNameFilter=new TagNameFilter("title");
 			NodeList nodeList = parser.parse(tagNameFilter);
 			String titleString = nodeList.elementAt(0).toPlainTextString();
-			appname = titleString.substring(0,titleString.lastIndexOf("-"));
-//			System.out.println("appname="+appname);
-			map.put("appname", appname);
+			String appname = titleString.substring(0,titleString.lastIndexOf("-"));
+			System.out.println("appname="+appname);
+//			map.put("appname", appname);
 			
 			
 			//清空
@@ -50,9 +55,11 @@ public class AppUtil {
 			AndFilter andFilter=new AndFilter(tagNameFilter, attributeFilter);
 			nodeList= parser.parse(andFilter);
 			TagNode tagNode  = (TagNode) nodeList.elementAt(0);
-			String apkicon = tagNode.getAttribute("src");
-			String filename=apkicon.substring(apkicon.lastIndexOf("/")+1);
-			map.put("filename", filename);
+			String appiconurl = tagNode.getAttribute("src");
+			System.out.println("appiconurl="+appiconurl);
+			String appicon=appiconurl.substring(appiconurl.lastIndexOf("/")+1);
+			System.out.println("appicon="+appicon);
+			HttpUtil.httpDownload(appiconurl, "E:\\AppFiles\\"+appicon);
 			
 			
 			parser.reset();
@@ -61,9 +68,16 @@ public class AppUtil {
 			attributeFilter = new HasAttributeFilter("class", "mj_xzdbd");
 			andFilter=new AndFilter(tagNameFilter, attributeFilter);
 			nodeList = parser.parse(andFilter);
-			tagNode  = (TagNode) nodeList.elementAt(0);
-			String apkurl = tagNode.getAttribute("href");
-			map.put("apkurl", apkurl);
+			String apkurl ="";
+			if(nodeList.size()>0){
+				
+				apkurl = tagNode.getAttribute("href");
+				System.out.println("apkurl="+apkurl);
+				if(apkurl!=null){
+					HttpUtil.httpDownload(apkurl, "E:\\AppFiles\\"+appname+".apk");
+				}
+				tagNode  = (TagNode) nodeList.elementAt(0);
+			}
 
 
 			parser.reset();
@@ -76,12 +90,6 @@ public class AppUtil {
 			String picname2 = picurl1.substring(picurl2.lastIndexOf("/")+1);
 			String picname3 = picurl1.substring(picurl3.lastIndexOf("/")+1);
 			
-			map.put("picurl1", picurl1);
-			map.put("picurl2", picurl2);
-			map.put("picurl3", picurl3);
-			map.put("picname1", picname1);
-			map.put("picname2", picname2);
-			map.put("picname3", picname3);
 			
 			//获取应用名称
 			parser.reset();
@@ -111,6 +119,7 @@ public class AppUtil {
 //				commentDate	评论时间
 				String commentDate = children.elementAt(2).getChildren().elementAt(1).toPlainTextString();
 				System.out.println("父类"+i+"的评论时间------------"+commentDate);
+				
 			}
 			
 			
@@ -129,17 +138,63 @@ public class AppUtil {
 				String str=liNode.elementAt(i).toPlainTextString();
 				String pro=str.substring(str.lastIndexOf("：")+1).trim();
 				System.out.println("pro="+pro);
-				list.add(pro);
+//				list.add(pro);
 			}
 			
-			map.put("list", list);
+//			map.put("list", list);
+			
+			
+			
+			
+			
+			
+			
+			//添加到数据库
+			app.setId(WebUtils.getRandomId());
+			
+			app.setAppname(appname);
+			
+			String strPrice=liNode.elementAt(1).toPlainTextString();
+			System.out.println("strPric="+strPrice.substring(strPrice.lastIndexOf("：")+1).trim());
+			app.setPrice(strPrice.substring(strPrice.lastIndexOf("：")+1).trim());
+
+			String strVersion=liNode.elementAt(2).toPlainTextString();
+			app.setVersion(strVersion.substring(strVersion.lastIndexOf("：")+1).trim());
+			
+			app.setAppicon(appicon);
+			
+			app.setApkurl(apkurl);
+			
+			String strFilesize=liNode.elementAt(3).toPlainTextString();
+			app.setFilesize(strFilesize.substring(strFilesize.lastIndexOf("：")+1).trim());
+			
+			String strDeveloper=liNode.elementAt(4).toPlainTextString();
+			app.setDeveloper(strDeveloper.substring(strDeveloper.lastIndexOf("：")+1).trim());
+
+			String strApptype=liNode.elementAt(5).toPlainTextString();
+			app.setApptype(strApptype.substring(strApptype.lastIndexOf("：")+1).trim());
+
+			//日期格式要转换
+			String strUpdatetime=liNode.elementAt(6).toPlainTextString();
+			String datatime=strUpdatetime.substring(strUpdatetime.lastIndexOf("：")+1).trim();
+			SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+			Date date = dateFormat.parse(datatime);
+			System.out.println("date="+date);
+			app.setUpdatetime(date);
+			
+			String strPlatform=liNode.elementAt(7).toPlainTextString();
+			app.setPlatform(strPlatform.substring(strPlatform.lastIndexOf("：")+1).trim());
+			
+			
+			appService.addApp(app);
+			
 			
 			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return map;
+//		return map;
 		
 	}
 	
@@ -156,15 +211,19 @@ public class AppUtil {
 			HasAttributeFilter attributeFilter = new HasAttributeFilter("id", id);
 			AndFilter andFilter=new AndFilter(tagNameFilter, attributeFilter);
 			NodeList nodeList = parser.parse(andFilter);
-			TagNode tagNode = (TagNode) nodeList.elementAt(0);
-			TagNode firstChild = (TagNode)tagNode.getFirstChild();
-			picurl = firstChild.getAttribute("src");
-			
+			if(nodeList.size()>0){
+				
+				TagNode tagNode = (TagNode) nodeList.elementAt(0);
+				TagNode firstChild = (TagNode)tagNode.getFirstChild();
+				picurl = firstChild.getAttribute("src");
+				System.out.println("picurl="+picurl);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		return picurl;
 	}
+	
 
 }

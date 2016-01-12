@@ -23,7 +23,7 @@ public class App {
 
     private String apptype;
 
-    private Float price;
+    private String price;
 
     private String downloadnums;
 
@@ -113,15 +113,16 @@ public class App {
         this.apptype = apptype == null ? null : apptype.trim();
     }
 
-    public Float getPrice() {
-        return price;
-    }
 
-    public void setPrice(Float price) {
-        this.price = price;
-    }
+    public String getPrice() {
+		return price;
+	}
 
-    public String getDownloadnums() {
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+	public String getDownloadnums() {
         return downloadnums;
     }
 
