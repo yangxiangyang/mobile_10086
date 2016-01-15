@@ -1,0 +1,54 @@
+
+查询 字段--对应的注释
+select column_name,column_comment from information_schema.columns where table_name = 't_app';
+
+-------------------------------------------------
+appname	应用名称
+version	版本
+appicon	应用图标
+apkurl	应用下载路径
+description	描述
+filesize	文件大小
+updatetime	更新时间
+developer	开发者
+apptype	应用类型
+price	价格
+downloadNums	下载量
+platform	所属平台
+status	应用状态
+codeurl	二维码图片路径
+----------------------------------------------
+
+picurl	图片路径
+description	图片描述
+app	所属应用
+------------------------------------------------
+commentUser	评论人
+commentDate	评论时间
+comment	评论内容
+commentNum	评分
+appid	所属应用
+
+-----------------------------------------------
+APP二维码地址
+APP二维码生成器
+
+---------------------------------------
+网页爬取
+多线程
+
+----------------2016-1-14 19:31:08-------------------------
+
+
+FreeMaker装成静态HTML网页
+二维码生成	
+
+--------------------2016-1-14 19:30:32--------------------
+
+dataTable
+
+
+
+
+
+

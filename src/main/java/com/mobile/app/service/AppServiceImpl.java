@@ -1,5 +1,7 @@
 package com.mobile.app.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +38,10 @@ public class AppServiceImpl  implements AppService{
 	public void addPic(Pic pic) {
 		picMapper.insert(pic);
 		
+	}
+
+	public List<App> findAllApp() {
+		return appMapper.findAllApp();
 	}
 
 }

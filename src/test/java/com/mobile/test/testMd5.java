@@ -19,15 +19,20 @@ public class testMd5 {
 		
 		
 		
-		String str="a+b=c";
-		String[] split = str.split("=");
-		String string = split[1];
-//		System.out.println(string);
+//		String str="a+b=c";
+//		String[] split = str.split("=");
+//		String string = split[1];
+////		System.out.println(string);
+//		
+//		String substring = str.substring(str.lastIndexOf("=")+1);
+//		System.out.println(str.lastIndexOf("="));
+//		System.out.println(substring);
 		
-		String substring = str.substring(str.lastIndexOf("=")+1);
-		System.out.println(str.lastIndexOf("="));
-		System.out.println(substring);
-		
+		String url="q";
+		if(2>1){
+			url="b";
+		}
+		System.out.println(url);
 		
 		
 	}

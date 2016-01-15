@@ -22,6 +22,16 @@
     id, appname, version, appicon, apkurl, description, filesize, updatetime, developer, 
     apptype, price, downloadNums, platform, status, codeurl
   </sql>
+  
+  
+  <select id="findAllApp" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from t_app
+  </select>
+  
+  
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

@@ -42,6 +42,11 @@ function quit(){
 		location.href="<%=request.getContextPath()%>/user/quit.do";
 	}
 }
+
+function findApps(){
+	alert("findApps")
+	location.href="<%=request.getContextPath()%>/app/findAppTable.do";
+}
 </script>
 </head>
 <body>
@@ -78,7 +83,7 @@ function quit(){
 					</c:when>
 					<c:otherwise>
 						<div class="use_before fr mt5">
-							<a class="c2290e4 fz16 lh40 ml20 mr20" href="javasript:void(0)" rel="nofollow">当前用户：${user2.loginname}</a>
+							<a class="c2290e4 fz16 lh40 ml20 mr20" href="javascript:findApps()" rel="nofollow">当前用户：${user2.loginname}</a>
 							<a class="c2290e4 fz16 lh40 ml20 mr20" href="javascript:quit();" rel="nofollow" >注销</a>
 						</div>
 					</c:otherwise>

@@ -1,9 +1,14 @@
 package com.mobile.app.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.AndFilter;
 import org.htmlparser.filters.HasAttributeFilter;
@@ -13,11 +18,16 @@ import org.htmlparser.util.NodeList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.mobile.app.bean.App;
 import com.mobile.app.bean.AppThread;
 import com.mobile.app.service.AppService;
-import com.mobile.util.AppUtil;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 @Controller
 @RequestMapping("app")
@@ -79,7 +89,83 @@ public class AppController {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	@RequestMapping("createHtml")
+	public void createHtml(HttpServletRequest request){
+		try {
+			Configuration configuration=new Configuration();
+			//加载flt模板的路径
+			configuration.setClassForTemplateLoading(this.getClass(), "../../../../");
+			
+			//获取模板文件
+			Template template = configuration.getTemplate("freemakerhtml.ftl");
+			
+			//获取根路径
+			String realPath = request.getSession().getServletContext().getRealPath("/html");
+			
+			Map map=new HashMap();
+			FileWriterWithEncoding out=null;
+			//获取数据
+			List<App> allApp = appService.findAllApp();
+			for (App app : allApp) {
+				map.put("app", app);
+				String netname = app.getAppname().replaceAll("/", "-");
+				out=new FileWriterWithEncoding(new File(realPath+"/"+netname+".html"), "UTF-8");
+				template.process(map, out);
+			}
+			
+			System.out.println("静态网页完成！");
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		} catch (TemplateException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("findAppTable")
+	public String findAppTable(){
+		List<App> allApp = appService.findAllApp();
+		return "app/appTable";
 		
+	}
+	
+	
+	@RequestMapping("tablelist")
+	@ResponseBody
+	public void tablelist(HttpServletRequest request,String draw,String start ,String length){
+
+		    //获取请求次数
+		    //数据起始位置
+		    //数据长度
+
+		    //总记录数
+		    String recordsTotal = "0";
+
+		    //过滤后记录数
+		    String recordsFiltered = "";
+
+		    //定义列名
+		    String[] cols = {"appname", "version"};
+		    //获取客户端需要那一列排序
+		    String orderColumn = "0";
+		    orderColumn = request.getParameter("order[0][column]");
+		    orderColumn = cols[Integer.parseInt(orderColumn)];
+		    //获取排序方式 默认为asc
+		    String orderDir = "asc";
+		    orderDir = request.getParameter("order[0][dir]");
+
+		    List<App> apps = appService.findAllApp();
+		    Map<Object, Object> info = new HashMap<Object, Object>();
+		    info.put("data", apps);
+		    info.put("recordsTotal", 100);
+		    info.put("recordsFiltered", recordsFiltered);
+		    info.put("draw", draw);
+		    String json = new Gson().toJson(info);
+		
+	}
 
 	
 }

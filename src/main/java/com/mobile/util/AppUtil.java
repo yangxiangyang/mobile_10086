@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.htmlparser.Parser;
 import org.htmlparser.filters.AndFilter;
@@ -25,16 +26,16 @@ public class AppUtil {
 	 * 功能：获取APP图标和APP下载路径,评论
 	 * 作者：yangxiangyang
 	 * 时间：2016年1月9日上午11:44:49
+	 * 说明：直接调用service，把对象存进数据库
 	 * 1.添加APP
 	 * 2.添加评论
+	 * 3.添加图片
 	 */
 	public static void getAppMsg(String url,AppService appService){
 		
 		App app=new App();
 		Comment appComment=new Comment();
 		Pic pic=new Pic();
-		
-		
 		
 		try {
 			//解析地址
@@ -68,14 +69,16 @@ public class AppUtil {
 			attributeFilter = new HasAttributeFilter("class", "mj_xzdbd");
 			andFilter=new AndFilter(tagNameFilter, attributeFilter);
 			nodeList = parser.parse(andFilter);
+			
 			String apkurl ="";
 			if(nodeList.size()>0){
+				tagNode  = (TagNode) nodeList.elementAt(0);
 				apkurl = tagNode.getAttribute("href");
 				System.out.println("apkurl="+apkurl);
 				if(apkurl!=null){
 					HttpUtil.httpDownload(apkurl, "E:\\AppFiles\\apps\\"+appname+".apk");
 				}
-				tagNode  = (TagNode) nodeList.elementAt(0);
+				
 			}
 
 
@@ -97,13 +100,15 @@ public class AppUtil {
 				String pro=str.substring(str.lastIndexOf("：")+1).trim();
 			}
 			
-			
 
 			/**
 			 * app添加到数据库
 			 */
-			app.setId(WebUtils.getRandomId());
+			app.setId(UUID.randomUUID().toString());
 			
+			//生成二维码
+			CodeUtil.createQRCode(apkurl, "E:\\AppFiles\\code\\"+app.getId()+".jpg", "E:\\AppFiles\\icons\\"+appicon);
+
 			app.setAppname(appname);
 			
 			String strPrice=liNode.elementAt(1).toPlainTextString();
@@ -175,7 +180,7 @@ public class AppUtil {
 				String commentDate = children.elementAt(2).getChildren().elementAt(1).toPlainTextString();
 				appComment.setCommentdate(dateFormat.parse(commentDate));
 				
-				appComment.setAppid(app.getId());
+				appComment.setAppid(UUID.randomUUID().toString());
 				
 				appService.addComment(appComment);
 				
@@ -199,17 +204,12 @@ public class AppUtil {
 					String strPicurl = firstChild.getAttribute("src");
 					System.out.println("strPicurl="+strPicurl);
 					HttpUtil.httpDownload(strPicurl, "E:\\AppFiles\\pictures\\"+strPicurl.substring(strPicurl.lastIndexOf("/")+1));
-					pic.setId(WebUtils.getRandomId());
+					pic.setId(UUID.randomUUID().toString());
 					pic.setPicurl(strPicurl.substring(strPicurl.lastIndexOf("/")+1));
 					pic.setApp(app.getId());
-					
 					appService.addPic(pic);
-					
 				}
 			}
-			
-		
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
