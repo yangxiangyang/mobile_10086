@@ -1,6 +1,7 @@
 package com.mobile.app.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.mobile.app.bean.App;
 
@@ -17,6 +18,8 @@ public interface AppMapper {
 
     int updateByPrimaryKey(App record);
     
-    public List<App> findAllApp();
+    public List<App> findAllApp(Map map);
+    
+    public int appCount();
     
 }

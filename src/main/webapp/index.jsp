@@ -67,7 +67,9 @@ function findApps(){
 				
 				
 				
-				
+				<div class="use_before fr mt5">
+					<a class="c2290e4 fz16 lh40 ml20 mr20" href="tenpay_api_b2c/index.jsp" rel="nofollow">我要推广APP</a>
+				</div>
 				<div class="use_before fr mt5">
 					<a class="c2290e4 fz16 lh40 ml20 mr20" href="<%=request.getContextPath()%>/app/analysisPage.do" rel="nofollow">解析页面</a>
 				</div>

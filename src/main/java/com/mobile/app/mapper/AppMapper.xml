@@ -24,10 +24,15 @@
   </sql>
   
   
-  <select id="findAllApp" resultMap="BaseResultMap">
+  <select id="findAllApp" resultMap="BaseResultMap" parameterType="map">
   	select 
     <include refid="Base_Column_List" />
     from t_app
+    limit #{start} , #{length}
+  </select>
+  
+  <select id="appCount" resultType="java.lang.Integer">
+  	select count(*) from t_app
   </select>
   
   

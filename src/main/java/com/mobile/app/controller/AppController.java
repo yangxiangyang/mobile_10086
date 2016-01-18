@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.htmlparser.Parser;
@@ -107,7 +108,7 @@ public class AppController {
 			Map map=new HashMap();
 			FileWriterWithEncoding out=null;
 			//获取数据
-			List<App> allApp = appService.findAllApp();
+			List<App> allApp = appService.findAllApp(null);
 			for (App app : allApp) {
 				map.put("app", app);
 				String netname = app.getAppname().replaceAll("/", "-");
@@ -127,7 +128,7 @@ public class AppController {
 	
 	@RequestMapping("findAppTable")
 	public String findAppTable(){
-		List<App> allApp = appService.findAllApp();
+		List<App> allApp = appService.findAllApp(null);
 		return "app/appTable";
 		
 	}
@@ -135,7 +136,7 @@ public class AppController {
 	
 	@RequestMapping("tablelist")
 	@ResponseBody
-	public void tablelist(HttpServletRequest request,String draw,String start ,String length){
+	public void tablelist(HttpServletRequest request,HttpServletResponse response, String draw,String start ,String length) throws Exception{
 
 		    //获取请求次数
 		    //数据起始位置
@@ -143,27 +144,40 @@ public class AppController {
 
 		    //总记录数
 		    String recordsTotal = "0";
+		    
+		    Integer appCount = appService.appCount();
+		    recordsTotal=appCount.toString();
 
 		    //过滤后记录数
 		    String recordsFiltered = "";
 
 		    //定义列名
-		    String[] cols = {"appname", "version"};
+		    String[] cols = {"id","appname","version","appicon","apkurl","description","filesize","updatetime","developer","apptype","price"};
 		    //获取客户端需要那一列排序
 		    String orderColumn = "0";
 		    orderColumn = request.getParameter("order[0][column]");
 		    orderColumn = cols[Integer.parseInt(orderColumn)];
 		    //获取排序方式 默认为asc
 		    String orderDir = "asc";
-		    orderDir = request.getParameter("order[0][dir]");
+		    orderDir = request.getParameter("order[0"
+		    		+ "][dir]");
 
-		    List<App> apps = appService.findAllApp();
+		    Map  map=new HashMap();
+		    if(start.equals("0")){
+		    	start="1";
+		    }
+		    map.put("start", Integer.parseInt(start));
+		    map.put("length", Integer.parseInt(length));
+		    
+		    List<App> apps = appService.findAllApp(map);
 		    Map<Object, Object> info = new HashMap<Object, Object>();
 		    info.put("data", apps);
-		    info.put("recordsTotal", 100);
-		    info.put("recordsFiltered", recordsFiltered);
-		    info.put("draw", draw);
+		    info.put("recordsTotal",recordsTotal);
+		    info.put("recordsFiltered","");
+		    info.put("draw",draw);
 		    String json = new Gson().toJson(info);
+//		    System.out.println("json="+json);
+		    response.getWriter().write(json);
 		
 	}
 

@@ -1,6 +1,7 @@
 package com.mobile.app.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.mobile.app.bean.App;
 import com.mobile.comment.bean.Comment;
@@ -14,7 +15,8 @@ public interface AppService {
 	
 	public void addPic(Pic pic);
 	
-	public List<App> findAllApp();
+	public List<App> findAllApp(Map map);
 	
+	public int appCount();
 
 }

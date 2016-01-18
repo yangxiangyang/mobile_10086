@@ -1,6 +1,7 @@
 package com.mobile.app.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,8 +41,12 @@ public class AppServiceImpl  implements AppService{
 		
 	}
 
-	public List<App> findAllApp() {
-		return appMapper.findAllApp();
+	public List<App> findAllApp(Map map) {
+		return appMapper.findAllApp(map);
+	}
+
+	public int appCount() {
+		return appMapper.appCount();
 	}
 
 }

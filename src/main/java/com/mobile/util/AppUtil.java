@@ -50,6 +50,7 @@ public class AppUtil {
 			System.out.println("appname="+appname);
 			
 			
+			
 			//清空
 			parser.reset();
 			//获取图标
